@@ -11,5 +11,4 @@ class MakaogiftApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
