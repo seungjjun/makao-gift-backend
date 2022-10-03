@@ -46,11 +46,11 @@ public class User {
     return amount;
   }
 
-  public static User fake() {
-    return new User(1L, "jel1y", "tester", 50_000L);
-  }
-
   public UserDto toDto() {
     return new UserDto(name, amount);
+  }
+
+  public static User fake() {
+    return new User(1L, "jel1y", "tester", 50_000L);
   }
 }

@@ -5,6 +5,7 @@ import kr.megaptera.makaogift.exceptions.UserNotFound;
 import kr.megaptera.makaogift.models.User;
 import kr.megaptera.makaogift.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
