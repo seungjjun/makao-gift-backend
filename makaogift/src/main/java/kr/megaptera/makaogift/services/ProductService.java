@@ -2,21 +2,32 @@ package kr.megaptera.makaogift.services;
 
 import kr.megaptera.makaogift.models.Product;
 import kr.megaptera.makaogift.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
 public class ProductService {
   private final ProductRepository productRepository;
+  private Pageable pageable;
 
   public ProductService(ProductRepository productRepository) {
     this.productRepository = productRepository;
   }
 
-  public List<Product> list() {
-    return productRepository.findAll();
+  public Page<Product> list(int page) {
+    Sort sort = Sort.by("id").descending();
+    pageable = PageRequest.of(page - 1, 8, sort);
+
+    return productRepository.findAll(pageable);
+  }
+
+  public Long allProduct() {
+    return productRepository.findAll(pageable).getTotalElements();
   }
 }
