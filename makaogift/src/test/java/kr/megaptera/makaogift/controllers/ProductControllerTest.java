@@ -2,6 +2,7 @@ package kr.megaptera.makaogift.controllers;
 
 import kr.megaptera.makaogift.models.Product;
 import kr.megaptera.makaogift.services.ProductService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,8 +28,8 @@ class ProductControllerTest {
   @MockBean
   private ProductService productService;
 
-  @Test
-  void products() throws Exception {
+  @BeforeEach
+  void setUp() {
     String manufacturer = "orion";
     String name = "jelly";
     String option = "big size";
@@ -42,18 +43,29 @@ class ProductControllerTest {
     Page<Product> page = new PageImpl<>(products);
 
     given(productService.list(1)).willReturn(page);
+    given(productService.findProduct(1L)).willReturn(product);
+  }
 
+  @Test
+  void products() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.get("/products")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content("{" +
-                "\"manufacturer\":\"" + manufacturer + "\"," +
-                "\"name\":\"" + name + "\"," +
-                "\"option\":\"" + option + "\"," +
+                "\"manufacturer\":\"orion\"," +
+                "\"name\":\"jelly\"," +
+                "\"option\":\"big size\"," +
                 "\"price\":10000" +
                 "}"))
         .andExpect(status().isOk());
 
     verify(productService).list(1);
+  }
+
+  @Test
+  void detail() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.get("/products/1")
+        )
+        .andExpect(status().isOk());
   }
 }

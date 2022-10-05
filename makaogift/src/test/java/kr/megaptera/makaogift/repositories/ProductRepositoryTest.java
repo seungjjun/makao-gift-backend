@@ -1,5 +1,6 @@
 package kr.megaptera.makaogift.repositories;
 
+import kr.megaptera.makaogift.exceptions.ProductNotFound;
 import kr.megaptera.makaogift.models.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,26 @@ class ProductRepositoryTest {
 
     assertThat(products).hasSize(1);
 
+  }
+
+  @Test
+  void findByProductId() {
+    String manufacturer = "orion";
+    String name = "jelly";
+    String option = "big size";
+    Long price = 10_000L;
+
+    jdbcTemplate.execute("DELETE FROM product");
+
+    jdbcTemplate.update("" +
+            "INSERT INTO PRODUCT(" +
+            "   id, manufacturer, name, option, price" +
+            ")" +
+            " VALUES(1, ?, ?, ?, ?)",
+        manufacturer, name, option, price);
+
+    Product product = productRepository.findById(1L).orElseThrow(ProductNotFound::new);
+
+    assertThat(product.getName()).isEqualTo("jelly");
   }
 }

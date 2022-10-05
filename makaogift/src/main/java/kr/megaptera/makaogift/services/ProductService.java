@@ -1,5 +1,6 @@
 package kr.megaptera.makaogift.services;
 
+import kr.megaptera.makaogift.exceptions.ProductNotFound;
 import kr.megaptera.makaogift.models.Product;
 import kr.megaptera.makaogift.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public class ProductService {
   }
 
   public Page<Product> list(int page) {
-    Sort sort = Sort.by("id").descending();
+    Sort sort = Sort.by("id");
     pageable = PageRequest.of(page - 1, 8, sort);
 
     return productRepository.findAll(pageable);
@@ -29,5 +30,10 @@ public class ProductService {
 
   public Long allProduct() {
     return productRepository.findAll(pageable).getTotalElements();
+  }
+
+  public Product findProduct(Long id) {
+    return productRepository.findById(id)
+        .orElseThrow(ProductNotFound::new);
   }
 }
