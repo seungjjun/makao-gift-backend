@@ -16,8 +16,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductController.class)
@@ -45,27 +47,20 @@ class ProductControllerTest {
     given(productService.list(1)).willReturn(page);
     given(productService.findProduct(1L)).willReturn(product);
   }
-
   @Test
   void products() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/products")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{" +
-                "\"manufacturer\":\"orion\"," +
-                "\"name\":\"jelly\"," +
-                "\"option\":\"big size\"," +
-                "\"price\":10000" +
-                "}"))
-        .andExpect(status().isOk());
+    mockMvc.perform(MockMvcRequestBuilders.get("/products"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(
+            containsString("\"manufacturer\":\"orion\"")
+        ));
 
     verify(productService).list(1);
   }
 
   @Test
   void detail() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/products/1")
-        )
+    mockMvc.perform(MockMvcRequestBuilders.get("/products/1"))
         .andExpect(status().isOk());
   }
 }

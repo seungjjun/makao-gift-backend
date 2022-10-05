@@ -30,6 +30,13 @@ public class User {
     this.amount = amount;
   }
 
+  public void pay(Long price) {
+    if(price > amount) {
+      return;
+    }
+    amount -= price;
+  }
+
   public Long id() {
     return id;
   }
