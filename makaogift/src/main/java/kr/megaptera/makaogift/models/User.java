@@ -30,8 +30,14 @@ public class User {
     this.amount = amount;
   }
 
+  public User(String userId, String name, Long amount) {
+    this.userId = userId;
+    this.name = name;
+    this.amount = amount;
+  }
+
   public void pay(Long price) {
-    if(price > amount) {
+    if (price > amount) {
       return;
     }
     amount -= price;

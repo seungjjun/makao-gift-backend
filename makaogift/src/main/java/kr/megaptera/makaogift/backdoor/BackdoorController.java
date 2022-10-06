@@ -21,6 +21,7 @@ public class BackdoorController {
   public String setupDatabase() {
     jdbcTemplate.execute("DELETE FROM PERSON");
     jdbcTemplate.execute("DELETE FROM PRODUCT");
+    jdbcTemplate.execute("DELETE FROM transaction");
 
     jdbcTemplate.execute("INSERT INTO PERSON(id, amount, name, user_ID)" +
         " VALUES(1, '50000', '노승준', 'jel1y')");

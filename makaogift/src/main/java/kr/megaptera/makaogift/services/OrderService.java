@@ -1,26 +1,39 @@
 package kr.megaptera.makaogift.services;
 
 import kr.megaptera.makaogift.exceptions.UserNotFound;
+import kr.megaptera.makaogift.models.Transaction;
 import kr.megaptera.makaogift.models.User;
+import kr.megaptera.makaogift.repositories.TransactionRepository;
 import kr.megaptera.makaogift.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 @Transactional
 public class OrderService {
   private final UserRepository userRepository;
 
-  public OrderService(UserRepository userRepository) {
+  private final TransactionRepository transactionRepository;
+
+  public OrderService(UserRepository userRepository, TransactionRepository transactionRepository) {
     this.userRepository = userRepository;
+    this.transactionRepository = transactionRepository;
   }
 
-  public Long order(String from,Long price) {
+  public Long order(String from, Long price, String receiver, String manufacturer,
+                    String productName, String option, int productNumber,
+                    String address, String message) {
     User user = userRepository.findByUserId(from).orElseThrow(UserNotFound::new);
 
     user.pay(price);
+
+    Transaction transaction = new Transaction(
+        from, receiver, manufacturer, productName, option,
+        productNumber, price, address, message
+    );
+
+    transactionRepository.save(transaction);
     return user.amount();
   }
 }
