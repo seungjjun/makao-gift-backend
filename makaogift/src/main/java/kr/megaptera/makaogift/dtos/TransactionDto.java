@@ -28,7 +28,7 @@ public class TransactionDto {
   public TransactionDto() {
   }
 
-  public TransactionDto(String sender, String receiver,
+  public TransactionDto(Long id, String sender, String receiver,
                         int productNumber, Long price, String address,
                         String message, String manufacturer, String option,
                         String productName, LocalDateTime createdAt) {

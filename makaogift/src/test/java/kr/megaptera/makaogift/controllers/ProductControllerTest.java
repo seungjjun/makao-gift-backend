@@ -61,6 +61,9 @@ class ProductControllerTest {
   @Test
   void detail() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.get("/products/1"))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(content().string(
+            containsString("\"manufacturer\":\"orion\"")
+        ));
   }
 }

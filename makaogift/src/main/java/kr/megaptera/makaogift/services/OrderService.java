@@ -28,12 +28,12 @@ public class OrderService {
 
     user.pay(price);
 
-    Transaction transaction = new Transaction(
+    Transaction order = new Transaction(
         from, receiver, manufacturer, productName, option,
         productNumber, price, address, message
     );
 
-    transactionRepository.save(transaction);
+    transactionRepository.save(order);
     return user.amount();
   }
 }

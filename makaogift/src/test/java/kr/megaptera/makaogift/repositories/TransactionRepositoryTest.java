@@ -18,7 +18,8 @@ class TransactionRepositoryTest {
   @Test
   void save() {
     Transaction transaction = new Transaction(
-        "jel1y", "Pikachu", "Lotte", "snack", "delicious", 1, 10_000L, "seoul", "gift"
+       "jel1y", "Pikachu", "Lotte", "snack",
+        "delicious", 1, 10_000L, "seoul", "gift"
     );
 
     transactionRepository.save(transaction);

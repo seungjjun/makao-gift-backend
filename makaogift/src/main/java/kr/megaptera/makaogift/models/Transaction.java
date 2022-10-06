@@ -42,9 +42,8 @@ public class Transaction {
   public Transaction() {
   }
 
-  public Transaction(String sender, String receiver, String manufacturer, String productName,
-                     String option, int productNumber, Long price,
-                     String address, String message) {
+  public Transaction(Long id, String sender, String receiver, int productNumber, Long price, String address, String message, String manufacturer, String option, String productName) {
+    this.id = id;
     this.sender = sender;
     this.receiver = receiver;
     this.productNumber = productNumber;
@@ -54,11 +53,74 @@ public class Transaction {
     this.manufacturer = manufacturer;
     this.option = option;
     this.productName = productName;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+
+  public Transaction(String sender, String receiver, String manufacturer, String productName,
+                     String option, int productNumber, Long price, String address, String message) {
+    this.sender = sender;
+    this.receiver = receiver;
+    this.manufacturer = manufacturer;
+    this.productName = productName;
+    this.option = option;
+    this.productNumber = productNumber;
+    this.price = price;
+    this.address = address;
+    this.message = message;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public String getSender() {
+    return sender;
+  }
+
+  public String getReceiver() {
+    return receiver;
+  }
+
+  public int getProductNumber() {
+    return productNumber;
+  }
+
+  public Long getPrice() {
+    return price;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public String getManufacturer() {
+    return manufacturer;
+  }
+
+  public String getOption() {
+    return option;
+  }
+
+  public String getProductName() {
+    return productName;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
   }
 
   public TransactionDto toDto() {
     return new TransactionDto(
-        sender, receiver, productNumber,
+        id, sender, receiver, productNumber,
         price, address, message, manufacturer,
         option, productName, createdAt
     );

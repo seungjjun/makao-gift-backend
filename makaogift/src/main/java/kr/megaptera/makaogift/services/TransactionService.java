@@ -1,5 +1,6 @@
 package kr.megaptera.makaogift.services;
 
+import kr.megaptera.makaogift.exceptions.TransactionNotFound;
 import kr.megaptera.makaogift.models.Transaction;
 import kr.megaptera.makaogift.repositories.TransactionRepository;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,10 @@ public class TransactionService {
   public List<Transaction> list(String userId) {
     List<Transaction> transactions = transactionRepository.findAllBySender(userId);
     return transactions;
+  }
+
+  public Transaction findTransaction(Long id) {
+    return transactionRepository.findById(id)
+        .orElseThrow(TransactionNotFound::new);
   }
 }
