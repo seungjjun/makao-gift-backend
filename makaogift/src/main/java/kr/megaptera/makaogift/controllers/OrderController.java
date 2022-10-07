@@ -2,11 +2,9 @@ package kr.megaptera.makaogift.controllers;
 
 import kr.megaptera.makaogift.dtos.OrderDto;
 import kr.megaptera.makaogift.dtos.OrderResultDto;
-import kr.megaptera.makaogift.dtos.ProductDto;
 import kr.megaptera.makaogift.dtos.TransactionDto;
 import kr.megaptera.makaogift.dtos.TransactionsDto;
 import kr.megaptera.makaogift.exceptions.TransactionNotFound;
-import kr.megaptera.makaogift.models.Product;
 import kr.megaptera.makaogift.models.Transaction;
 import kr.megaptera.makaogift.models.User;
 import kr.megaptera.makaogift.services.OrderService;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,22 +29,27 @@ public class OrderController {
 
   private final TransactionService transactionService;
 
-  public OrderController(OrderService orderService, TransactionService transactionService) {
+  public OrderController(OrderService orderService,
+                         TransactionService transactionService) {
     this.orderService = orderService;
     this.transactionService = transactionService;
   }
 
   @GetMapping("/orders")
-  public TransactionsDto list() {
+  public TransactionsDto list(
+      @RequestParam(required = false, defaultValue = "1") Integer page
+  ) {
     User user = new User("jel1y", "jun", 50_000L);
 
-    List<Transaction> transactions = transactionService.list(user.userId());
+    List<Transaction> transactions = transactionService.list(user.userId(), page);
 
     List<TransactionDto> transactionDto = transactions.stream()
         .map(Transaction::toDto)
         .collect(Collectors.toList());
 
-    return new TransactionsDto(transactionDto);
+    Long transactionNumber = transactionService.transactions();
+
+    return new TransactionsDto(transactionDto, transactionNumber);
   }
 
   @GetMapping("orders/{id}")
@@ -54,12 +58,7 @@ public class OrderController {
   ) {
     Transaction transaction = transactionService.findTransaction(id);
 
-    return new TransactionDto(
-        transaction.getId(), transaction.getSender(), transaction.getReceiver(),
-        transaction.getProductNumber(), transaction.getPrice(), transaction.getAddress(),
-        transaction.getMessage(), transaction.getManufacturer(), transaction.getOption(),
-        transaction.getProductName(), transaction.getCreatedAt()
-    );
+    return transaction.toDto();
   }
 
   @PostMapping("/order")

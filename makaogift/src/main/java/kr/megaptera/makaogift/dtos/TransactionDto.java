@@ -23,7 +23,7 @@ public class TransactionDto {
 
   private String productName;
 
-  private LocalDateTime createdAt;
+  private String createdAt;
 
   public TransactionDto() {
   }
@@ -31,7 +31,7 @@ public class TransactionDto {
   public TransactionDto(Long id, String sender, String receiver,
                         int productNumber, Long price, String address,
                         String message, String manufacturer, String option,
-                        String productName, LocalDateTime createdAt) {
+                        String productName, String createdAt) {
     this.id = id;
     this.sender = sender;
     this.receiver = receiver;
@@ -85,7 +85,7 @@ public class TransactionDto {
     return productName;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public String getCreatedAt() {
     return createdAt;
   }
 }

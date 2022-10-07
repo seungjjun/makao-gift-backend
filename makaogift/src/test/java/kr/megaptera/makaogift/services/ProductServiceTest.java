@@ -32,9 +32,6 @@ class ProductServiceTest {
   @SpyBean
   private Pageable pageable;
 
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
-
   @BeforeEach
   void setUp() {
     productRepository = mock(ProductRepository.class);

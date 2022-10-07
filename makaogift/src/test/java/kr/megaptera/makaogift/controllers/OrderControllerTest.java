@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -44,7 +46,7 @@ class OrderControllerTest {
 
     String userId = "jel1y";
 
-    given(transactionService.list(userId)).willReturn(List.of(transaction));
+    given(transactionService.list(userId, 1)).willReturn(List.of(transaction));
 
     mockMvc.perform(MockMvcRequestBuilders.get("/orders"))
         .andExpect(status().isOk())
@@ -56,7 +58,8 @@ class OrderControllerTest {
   @Test
   void detail() throws Exception {
     Transaction transaction =
-        new Transaction(1L,"jel1y", "Tester", 2, 20_000L, "Lotte", "jelly", "good", "seoul", "gift");
+        new Transaction(1L,"jel1y", "Tester", 2, 20_000L,
+            "Lotte", "jelly", "good", "seoul", "gift", LocalDateTime.now());
 
     given(transactionService.findTransaction(1L)).willReturn(transaction);
 

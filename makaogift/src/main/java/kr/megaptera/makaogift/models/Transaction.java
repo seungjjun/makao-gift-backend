@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Transaction {
@@ -42,7 +43,25 @@ public class Transaction {
   public Transaction() {
   }
 
-  public Transaction(Long id, String sender, String receiver, int productNumber, Long price, String address, String message, String manufacturer, String option, String productName) {
+  public Transaction(
+      String sender, String receiver, String manufacturer, String productName,
+      String option, int productNumber, Long price, String address, String message
+  ) {
+    this.sender = sender;
+    this.receiver = receiver;
+    this.manufacturer = manufacturer;
+    this.productName = productName;
+    this.option = option;
+    this.productNumber = productNumber;
+    this.price = price;
+    this.address = address;
+    this.message = message;
+  }
+
+  public Transaction(
+      Long id, String sender, String receiver, int productNumber,
+      Long price, String address, String message, String manufacturer,
+      String option, String productName, LocalDateTime createdAt) {
     this.id = id;
     this.sender = sender;
     this.receiver = receiver;
@@ -53,21 +72,6 @@ public class Transaction {
     this.manufacturer = manufacturer;
     this.option = option;
     this.productName = productName;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
-  public Transaction(String sender, String receiver, String manufacturer, String productName,
-                     String option, int productNumber, Long price, String address, String message) {
-    this.sender = sender;
-    this.receiver = receiver;
-    this.manufacturer = manufacturer;
-    this.productName = productName;
-    this.option = option;
-    this.productNumber = productNumber;
-    this.price = price;
-    this.address = address;
-    this.message = message;
   }
 
   public Long getId() {
@@ -122,7 +126,8 @@ public class Transaction {
     return new TransactionDto(
         id, sender, receiver, productNumber,
         price, address, message, manufacturer,
-        option, productName, createdAt
+        option, productName,
+        createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     );
   }
 }
