@@ -39,7 +39,7 @@ public class OrderController {
   public TransactionsDto list(
       @RequestParam(required = false, defaultValue = "1") Integer page
   ) {
-    User user = new User("jel1y", "jun", 50_000L);
+    User user = new User("jel1y", "Qwe1234!", "jun", 50_000L);
 
     List<Transaction> transactions = transactionService.list(user.userId(), page);
 

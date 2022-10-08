@@ -1,6 +1,7 @@
 package kr.megaptera.makaogift.backdoor;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +14,12 @@ import javax.transaction.Transactional;
 public class BackdoorController {
   private final JdbcTemplate jdbcTemplate;
 
-  public BackdoorController(JdbcTemplate jdbcTemplate) {
+  private final PasswordEncoder passwordEncoder;
+
+  public BackdoorController(JdbcTemplate jdbcTemplate,
+                            PasswordEncoder passwordEncoder) {
     this.jdbcTemplate = jdbcTemplate;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @GetMapping("setup-database")
@@ -23,8 +28,12 @@ public class BackdoorController {
     jdbcTemplate.execute("DELETE FROM PRODUCT");
     jdbcTemplate.execute("DELETE FROM transaction");
 
-    jdbcTemplate.execute("INSERT INTO PERSON(id, amount, name, user_ID)" +
-        " VALUES(1, '50000', '노승준', 'jel1y')");
+    jdbcTemplate.update("" +
+            "INSERT INTO person(id, amount, name, user_ID, encoded_password" +
+            ")" +
+        " VALUES(1, ?, ?, ?, ?)",
+        50_000, "노승준", "jel1y", passwordEncoder.encode("password")
+    );
 
     jdbcTemplate.execute("INSERT INTO PRODUCT" +
         "(id, manufacturer, name, option, price)" +

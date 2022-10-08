@@ -25,7 +25,7 @@ class OrderServiceTest {
 
   @BeforeEach
   void setUp() {
-    user = new User(1L, "jel1y", "Pikachu", 50_000L);
+    user = new User(1L, "jel1y", "Qwe1234!", "Pikachu", 50_000L);
 
     userRepository = mock(UserRepository.class);
 

@@ -1,6 +1,7 @@
 package kr.megaptera.makaogift.models;
 
 import kr.megaptera.makaogift.dtos.UserDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,8 @@ public class User {
 
   private String userId;
 
+  private String encodedPassword;
+
   private String name;
 
   private Long amount;
@@ -23,15 +26,17 @@ public class User {
   public User() {
   }
 
-  public User(Long id, String userId, String name, Long amount) {
+  public User(Long id, String userId, String password, String name, Long amount) {
     this.id = id;
     this.userId = userId;
+    this.encodedPassword = password;
     this.name = name;
     this.amount = amount;
   }
 
-  public User(String userId, String name, Long amount) {
+  public User(String userId, String password, String name, Long amount) {
     this.userId = userId;
+    this.encodedPassword = password;
     this.name = name;
     this.amount = amount;
   }
@@ -64,6 +69,16 @@ public class User {
   }
 
   public static User fake() {
-    return new User(1L, "jel1y", "tester", 50_000L);
+    return new User(1L, "jel1y", "Qwe1234!", "tester", 50_000L);
+  }
+
+  public boolean authenticate(String password,
+                              PasswordEncoder passwordEncoder) {
+    return passwordEncoder.matches(password, encodedPassword);
+  }
+
+  public void changePassword(String password,
+                             PasswordEncoder passwordEncoder) {
+    encodedPassword = passwordEncoder.encode(password);
   }
 }

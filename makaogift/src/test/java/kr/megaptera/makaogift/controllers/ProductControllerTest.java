@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -47,6 +46,7 @@ class ProductControllerTest {
     given(productService.list(1)).willReturn(page);
     given(productService.findProduct(1L)).willReturn(product);
   }
+
   @Test
   void products() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.get("/products"))
