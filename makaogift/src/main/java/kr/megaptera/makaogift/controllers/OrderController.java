@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,11 +38,10 @@ public class OrderController {
 
   @GetMapping("/orders")
   public TransactionsDto list(
-      @RequestParam(required = false, defaultValue = "1") Integer page
+      @RequestParam(required = false, defaultValue = "1") Integer page,
+      @RequestAttribute("userId") String userId
   ) {
-    User user = new User("jel1y", "Qwe1234!", "jun", 50_000L);
-
-    List<Transaction> transactions = transactionService.list(user.userId(), page);
+    List<Transaction> transactions = transactionService.list(userId, page);
 
     List<TransactionDto> transactionDto = transactions.stream()
         .map(Transaction::toDto)
@@ -65,14 +65,12 @@ public class OrderController {
   @ResponseStatus(HttpStatus.CREATED)
   public OrderResultDto order(
       @Valid @RequestBody OrderDto orderDto) {
-    // TODO: 인증 후 처리 필요
-    String currentUser = "jel1y";
 
-    Long amount = orderService.order(currentUser, orderDto.getPrice(),
+    Long amount = orderService.order(orderDto.getUserId(), orderDto.getPrice(),
         orderDto.getReceiver(), orderDto.getManufacturer(),
         orderDto.getProductName(), orderDto.getOption(),
         orderDto.getProductNumber(), orderDto.getAddress(),
-        orderDto.getMessage());
+        orderDto.getMessage(), orderDto.getImage());
 
     return new OrderResultDto(amount);
   }

@@ -19,7 +19,7 @@ class TransactionRepositoryTest {
   void save() {
     Transaction transaction = new Transaction(
        "jel1y", "Pikachu", "Lotte", "snack",
-        "delicious", 1, 10_000L, "seoul", "gift"
+        "delicious", 1, 10_000L, "seoul", "gift", "image"
     );
 
     transactionRepository.save(transaction);

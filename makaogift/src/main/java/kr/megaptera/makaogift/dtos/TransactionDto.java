@@ -25,13 +25,15 @@ public class TransactionDto {
 
   private String createdAt;
 
+  private String image;
+
   public TransactionDto() {
   }
 
   public TransactionDto(Long id, String sender, String receiver,
                         int productNumber, Long price, String address,
                         String message, String manufacturer, String option,
-                        String productName, String createdAt) {
+                        String productName, String image, String createdAt) {
     this.id = id;
     this.sender = sender;
     this.receiver = receiver;
@@ -43,6 +45,11 @@ public class TransactionDto {
     this.option = option;
     this.productName = productName;
     this.createdAt = createdAt;
+    this.image = image;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public Long getId() {

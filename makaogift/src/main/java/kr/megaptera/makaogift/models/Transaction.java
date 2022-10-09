@@ -34,6 +34,8 @@ public class Transaction {
 
   private String productName;
 
+  private String image;
+
   @CreationTimestamp
   private LocalDateTime createdAt;
 
@@ -45,7 +47,8 @@ public class Transaction {
 
   public Transaction(
       String sender, String receiver, String manufacturer, String productName,
-      String option, int productNumber, Long price, String address, String message
+      String option, int productNumber, Long price, String address, String message,
+      String image
   ) {
     this.sender = sender;
     this.receiver = receiver;
@@ -56,6 +59,7 @@ public class Transaction {
     this.price = price;
     this.address = address;
     this.message = message;
+    this.image = image;
   }
 
   public Transaction(
@@ -72,6 +76,10 @@ public class Transaction {
     this.manufacturer = manufacturer;
     this.option = option;
     this.productName = productName;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public Long getId() {
@@ -126,7 +134,7 @@ public class Transaction {
     return new TransactionDto(
         id, sender, receiver, productNumber,
         price, address, message, manufacturer,
-        option, productName,
+        option, productName, image,
         createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     );
   }

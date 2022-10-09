@@ -39,7 +39,7 @@ class OrderServiceTest {
   @Test
   void order() {
     orderService.order("jel1y", 20_000L, "Pikachu", "orion", "snack", "delicious",
-        1, "seoul", "gift");
+        1, "seoul", "gift", "image");
 
     assertThat(user.amount()).isEqualTo(30_000L);
 
@@ -49,7 +49,7 @@ class OrderServiceTest {
   @Test
   void orderWithTooMuchPrice() {
     orderService.order("jel1y", 100_000L, "Pikachu", "orion", "snack", "delicious",
-        1, "seoul", "gift");
+        1, "seoul", "gift", "image");
 
     assertThat(user.amount()).isEqualTo(50_000L);
   }

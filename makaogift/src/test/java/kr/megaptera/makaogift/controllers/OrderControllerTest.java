@@ -96,6 +96,6 @@ class OrderControllerTest {
         .andExpect(status().isCreated());
 
     verify(orderService).order("jel1y", 20_000L, "Tester", "Lotte", "jelly", "good",
-        2, "seoul", "gift");
+        2, "seoul", "gift", "image");
   }
 }

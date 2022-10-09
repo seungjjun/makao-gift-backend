@@ -3,7 +3,7 @@ package kr.megaptera.makaogift.dtos;
 public class OrderDto {
   private Long id;
 
-  private String sender;
+  private String userId;
 
   private String receiver;
 
@@ -21,11 +21,13 @@ public class OrderDto {
 
   private String productName;
 
-  public OrderDto(Long id, String sender, String receiver, int productNumber,
+  private String image;
+
+  public OrderDto(Long id, String userId, String receiver, int productNumber,
                   Long price, String address, String message,
-                  String manufacturer, String option, String productName) {
+                  String manufacturer, String option, String productName, String image) {
     this.id = id;
-    this.sender = sender;
+    this.userId = userId;
     this.receiver = receiver;
     this.productNumber = productNumber;
     this.price = price;
@@ -34,14 +36,19 @@ public class OrderDto {
     this.manufacturer = manufacturer;
     this.option = option;
     this.productName = productName;
+    this.image = image;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public Long getId() {
     return id;
   }
 
-  public String getSender() {
-    return sender;
+  public String getUserId() {
+    return userId;
   }
 
   public String getReceiver() {

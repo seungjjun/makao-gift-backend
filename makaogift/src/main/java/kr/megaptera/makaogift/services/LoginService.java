@@ -6,7 +6,10 @@ import kr.megaptera.makaogift.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class LoginService {
   private final UserRepository userRepository;
 
@@ -20,7 +23,7 @@ public class LoginService {
 
   public User login(String userId, String password) {
     User user = userRepository.findByUserId(userId)
-        .orElseThrow(() -> new LoginFailed());
+        .orElseThrow(LoginFailed::new);
 
     if(!user.authenticate(password, passwordEncoder)) {
       throw new LoginFailed();

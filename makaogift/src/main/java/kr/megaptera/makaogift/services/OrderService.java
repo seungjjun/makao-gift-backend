@@ -23,14 +23,14 @@ public class OrderService {
 
   public Long order(String from, Long price, String receiver, String manufacturer,
                     String productName, String option, int productNumber,
-                    String address, String message) {
+                    String address, String message, String image) {
     User user = userRepository.findByUserId(from).orElseThrow(UserNotFound::new);
 
     user.pay(price);
 
     Transaction order = new Transaction(
         from, receiver, manufacturer, productName, option,
-        productNumber, price, address, message
+        productNumber, price, address, message, image
     );
 
     transactionRepository.save(order);

@@ -20,6 +20,8 @@ public class Product {
 
   private Long price;
 
+  private String image;
+
   public Product() {
   }
 
@@ -30,6 +32,19 @@ public class Product {
     this.name = name;
     this.option = option;
     this.price = price;
+  }
+
+  public Product(Long id, String manufacturer, String name, String option, Long price, String image) {
+    this.id = id;
+    this.manufacturer = manufacturer;
+    this.name = name;
+    this.option = option;
+    this.price = price;
+    this.image = image;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public Long getId() {
@@ -54,7 +69,7 @@ public class Product {
 
   public ProductDto toDto() {
     return new ProductDto(
-        id, manufacturer, name, option, price
+        id, manufacturer, name, option, price, image
     );
   }
 }

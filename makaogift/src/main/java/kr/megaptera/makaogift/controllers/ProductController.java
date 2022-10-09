@@ -40,14 +40,15 @@ public class ProductController {
   @GetMapping("products/{id}")
   public ProductDto detail(
       @PathVariable Long id
-  ){
+  ) {
     Product product = productService.findProduct(id);
     return new ProductDto(
         product.getId(),
         product.getManufacturer(),
         product.getName(),
         product.getOption(),
-        product.getPrice());
+        product.getPrice(),
+        product.getImage());
   }
 
   @ExceptionHandler(ProductNotFound.class)

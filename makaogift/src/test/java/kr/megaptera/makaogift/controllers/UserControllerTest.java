@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -42,5 +43,21 @@ class UserControllerTest {
 
     mockMvc.perform(MockMvcRequestBuilders.get("/user/me"))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void signup() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/signup")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"name\":\"노승준\"," +
+                "\"userId\":\"jel1y\"," +
+                "\"password\":\"Qwe1234!\"," +
+                "\"confirmPassword\":\"Qwe1234!\"" +
+                "}"))
+        .andExpect(status().isCreated())
+        .andExpect(content().string(
+            containsString("name:")
+        ));
   }
 }

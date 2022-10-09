@@ -11,6 +11,8 @@ public class ProductDto {
 
   private Long price;
 
+  private String image;
+
   public ProductDto() {
   }
 
@@ -20,6 +22,19 @@ public class ProductDto {
     this.name = name;
     this.option = option;
     this.price = price;
+  }
+
+  public ProductDto(Long id, String manufacturer, String name, String option, Long price, String image) {
+    this.id = id;
+    this.manufacturer = manufacturer;
+    this.name = name;
+    this.option = option;
+    this.price = price;
+    this.image = image;
+  }
+
+  public String getImage() {
+    return image;
   }
 
   public Long getId() {

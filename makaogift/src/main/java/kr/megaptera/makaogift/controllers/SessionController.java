@@ -5,6 +5,7 @@ import kr.megaptera.makaogift.dtos.LoginResultDto;
 import kr.megaptera.makaogift.exceptions.LoginFailed;
 import kr.megaptera.makaogift.models.User;
 import kr.megaptera.makaogift.services.LoginService;
+import kr.megaptera.makaogift.utils.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/session")
+@RequestMapping("/login")
 public class SessionController {
   private final LoginService loginService;
+  private final JwtUtil jwtUtil;
 
-  public SessionController(LoginService loginService) {
+  public SessionController(LoginService loginService, JwtUtil jwtUtil) {
     this.loginService = loginService;
+    this.jwtUtil = jwtUtil;
   }
 
   @PostMapping
@@ -27,11 +30,12 @@ public class SessionController {
   public LoginResultDto login(
       @RequestBody LoginRequestDto loginRequestDto
   ) {
-    User user = loginService.login(
-        loginRequestDto.getUserId(), loginRequestDto.getPassword());
+    String userId = loginRequestDto.getUserId();
+    String password = loginRequestDto.getPassword();
 
-    // TODO 토큰 처리 필요
-    String accessToken = "accessToken";
+    User user = loginService.login(userId, password);
+
+    String accessToken = jwtUtil.encode(userId);
 
     return new LoginResultDto(
        accessToken, user.name(), user.amount()
