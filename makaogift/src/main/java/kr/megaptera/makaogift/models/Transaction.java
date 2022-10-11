@@ -76,6 +76,7 @@ public class Transaction {
     this.manufacturer = manufacturer;
     this.option = option;
     this.productName = productName;
+    this.createdAt = createdAt;
   }
 
   public String getImage() {

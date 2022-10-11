@@ -1,16 +1,20 @@
 package kr.megaptera.makaogift.dtos;
 
+import javax.validation.constraints.NotBlank;
+
 public class OrderDto {
   private Long id;
 
   private String userId;
 
+  @NotBlank(message = "성함을 입력해주세요")
   private String receiver;
 
   private int productNumber;
 
   private Long price;
 
+  @NotBlank(message = "주소를 입력해주세요")
   private String address;
 
   private String message;

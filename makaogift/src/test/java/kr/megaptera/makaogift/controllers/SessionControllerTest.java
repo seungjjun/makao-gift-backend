@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SessionController.class)
@@ -34,7 +36,7 @@ class SessionControllerTest {
 
   @Test
   void loginSuccess() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.post("/session")
+    mockMvc.perform(MockMvcRequestBuilders.post("/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{" +
                 "\"userId\":\"jel1y\"," +
@@ -45,23 +47,57 @@ class SessionControllerTest {
 
   @Test
   void loginFailedWithIncorrectUserId() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.post("/session")
+    mockMvc.perform(MockMvcRequestBuilders.post("/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{" +
                 "\"userId\":\"!@#$\"," +
                 "\"password\":\"Qwe1234!\"" +
                 " }"))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(
+            containsString("\"code\":1001")
+        ));
   }
 
   @Test
   void loginFailedWithIncorrectPassword() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.post("/session")
+    mockMvc.perform(MockMvcRequestBuilders.post("/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{" +
                 "\"userId\":\"jel1y\"," +
                 "\"password\":\"xxx\"" +
                 " }"))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(
+            containsString("\"code\":1001")
+        ));
+  }
+
+  @Test
+  void loginWithBlankId() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"userId\":\"\"," +
+                "\"password\":\"Qwe1234!\"" +
+                " }"))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(
+            containsString("아이디를 입력해주세요")
+        ));
+  }
+
+  @Test
+  void loginWithBlankPassword() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"userId\":\"jel1y\"," +
+                "\"password\":\"\"" +
+                " }"))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(
+            containsString("비밀번호를 입력해주세요")
+        ));
   }
 }

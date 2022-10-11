@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class UserController {
   private final UserService userService;
@@ -35,7 +37,7 @@ public class UserController {
   @PostMapping("/signup")
   @ResponseStatus(HttpStatus.CREATED)
   public UserRegisteredDto signup(
-      @RequestBody UserRegistrationDto userRegistrationDto
+      @Valid @RequestBody UserRegistrationDto userRegistrationDto
   ) {
     User user = userService.register(userRegistrationDto);
     return user.toRegisteredDto();
