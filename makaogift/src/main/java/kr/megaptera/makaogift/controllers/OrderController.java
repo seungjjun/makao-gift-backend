@@ -1,15 +1,19 @@
 package kr.megaptera.makaogift.controllers;
 
+import kr.megaptera.makaogift.dtos.ErrorDto;
 import kr.megaptera.makaogift.dtos.OrderDto;
 import kr.megaptera.makaogift.dtos.OrderResultDto;
 import kr.megaptera.makaogift.dtos.TransactionDto;
+import kr.megaptera.makaogift.dtos.TransactionFailedDto;
 import kr.megaptera.makaogift.dtos.TransactionsDto;
 import kr.megaptera.makaogift.exceptions.TransactionNotFound;
 import kr.megaptera.makaogift.models.Transaction;
-import kr.megaptera.makaogift.models.User;
 import kr.megaptera.makaogift.services.OrderService;
 import kr.megaptera.makaogift.services.TransactionService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,9 +79,21 @@ public class OrderController {
     return new OrderResultDto(amount);
   }
 
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public String orderFailed(MethodArgumentNotValidException exception) {
+    BindingResult errors = exception.getBindingResult();
+
+    for (ObjectError error : errors.getAllErrors()) {
+
+      return error.getDefaultMessage();
+    }
+    return "Order Failed!";
+  }
+
   @ExceptionHandler(TransactionNotFound.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public String transactionNotFound() {
-    return "거래내역을 불러올 수 없습니다.";
+  public ErrorDto transactionNotFound() {
+    return new TransactionFailedDto();
   }
 }

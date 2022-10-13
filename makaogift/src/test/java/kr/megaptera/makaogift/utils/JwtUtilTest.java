@@ -28,9 +28,4 @@ class JwtUtilTest {
 
     assertThat(userId).isEqualTo(originalId);
   }
-
-  @Test
-  void decodeError() {
-    String userId = jwtUtil.decode("xxx");
-  }
 }

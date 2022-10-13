@@ -49,7 +49,7 @@ class UserServiceTest {
     UserRegistrationDto userRegistrationDto =
         new UserRegistrationDto("노승준", "jel1y", "Qwe1234!", "Qwe1234!");
 
-    User user = userService.register(userRegistrationDto);
+    User user = userService.register("노승준", "jel1y", "Qwe1234!");
 
     verify(userRepository).save(user);
   }

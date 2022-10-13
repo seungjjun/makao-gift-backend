@@ -1,6 +1,9 @@
 package kr.megaptera.makaogift.controllers;
 
+import kr.megaptera.makaogift.dtos.ErrorDto;
+import kr.megaptera.makaogift.dtos.ExistingUserIdDto;
 import kr.megaptera.makaogift.dtos.UserDto;
+import kr.megaptera.makaogift.dtos.UserNotFoundDto;
 import kr.megaptera.makaogift.dtos.UserRegisteredDto;
 import kr.megaptera.makaogift.dtos.UserRegistrationDto;
 import kr.megaptera.makaogift.exceptions.ExistingUserId;
@@ -8,11 +11,16 @@ import kr.megaptera.makaogift.exceptions.UserNotFound;
 import kr.megaptera.makaogift.models.User;
 import kr.megaptera.makaogift.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,19 +47,36 @@ public class UserController {
   public UserRegisteredDto signup(
       @Valid @RequestBody UserRegistrationDto userRegistrationDto
   ) {
-    User user = userService.register(userRegistrationDto);
+    String name = userRegistrationDto.getName();
+    String userId = userRegistrationDto.getUserId();
+    String password = userRegistrationDto.getPassword();
+
+    User user = userService.register(name, userId, password);
+
     return user.toRegisteredDto();
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public String registrationFailed(MethodArgumentNotValidException exception) {
+    BindingResult errors = exception.getBindingResult();
+
+    for (ObjectError error : errors.getAllErrors()) {
+
+      return error.getDefaultMessage();
+    }
+    return "Registration Failed!";
   }
 
   @ExceptionHandler(UserNotFound.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public String userNotFound() {
-    return "아이디 혹은 비밀번호가 맞지 않습니다";
+  public ErrorDto userNotFound() {
+    return new UserNotFoundDto();
   }
 
   @ExceptionHandler(ExistingUserId.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public String existingUserId() {
-    return "해당 아이디는 사용할 수 없습니다";
+  public ErrorDto existingUserId() {
+    return new ExistingUserIdDto();
   }
 }

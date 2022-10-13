@@ -29,20 +29,18 @@ public class UserService {
     return user;
   }
 
-  public User register(UserRegistrationDto userRegistrationDto) {
-    String userId = userRegistrationDto.getUserId();
-
-    if(!(userRepository.getByUserId(userId) == null)) {
+  public User register(String name, String userId, String password) {
+    if (!(userRepository.getByUserId(userId) == null)) {
       throw new ExistingUserId();
     }
 
     User user = new User(
-        userRegistrationDto.getName(),
+        name,
         userId,
-        userRegistrationDto.getPassword()
+        password
         );
 
-    user.changePassword(userRegistrationDto.getPassword(), passwordEncoder);
+    user.changePassword(password, passwordEncoder);
 
     userRepository.save(user);
 

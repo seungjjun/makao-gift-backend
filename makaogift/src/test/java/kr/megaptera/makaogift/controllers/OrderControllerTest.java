@@ -4,10 +4,12 @@ import kr.megaptera.makaogift.models.Transaction;
 import kr.megaptera.makaogift.repositories.TransactionRepository;
 import kr.megaptera.makaogift.services.OrderService;
 import kr.megaptera.makaogift.services.TransactionService;
+import kr.megaptera.makaogift.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,15 +41,21 @@ class OrderControllerTest {
   @MockBean
   private TransactionRepository transactionRepository;
 
+  @SpyBean
+  private JwtUtil jwtUtil;
+
   @Test
   void list() throws Exception {
     Transaction transaction = mock(Transaction.class);
 
     String userId = "jel1y";
 
-    given(transactionService.list(userId, 1)).willReturn(List.of(transaction));
+    given(transactionService.list(userId, 2)).willReturn(List.of(transaction));
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/orders"))
+    String token = jwtUtil.encode(userId);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/orders")
+            .header("Authorization", "Bearer " + token))
         .andExpect(status().isOk())
         .andExpect(content().string(
             containsString("\"transactions\":[")
